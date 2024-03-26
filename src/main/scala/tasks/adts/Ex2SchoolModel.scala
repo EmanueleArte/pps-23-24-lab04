@@ -26,8 +26,8 @@ object SchoolModel:
       def addCourse(name: String): School
       def teacherByName(name: String): Optional[Teacher]
       def courseByName(name: String): Optional[Course]
-      //      def nameOfTeacher(course: Course): String
-      //      def nameOfCourse(teacher: Teacher): String
+      def nameOfTeacher(course: Course): String
+      def nameOfCourse(teacher: Teacher): String
       def setTeacherToCourse(teacher: Teacher, course: Course): School
       def coursesOfATeacher(teacher: Teacher): Sequence[Course]
 
@@ -50,11 +50,17 @@ object SchoolModel:
         case Cons(h, _) => Just(h)
         case _ => Empty()
 
-      //      def nameOfTeacher(course: Course): String = filter(school.teachers)(t => filter(t.courses)(c => c == course)) match
-      //        case Cons(h, _) => h.name
-      //        case _ => ""
-      //
-      //      def nameOfCourse(teacher: Teacher): String =
+      def nameOfTeacher(course: Course): String = filter(school.teachers)(t => filter(t.courses)(c => c.name == course.name) match
+        case Cons(_, _) => true
+        case _ => false) match
+          case Cons(h, _) => h.name
+          case _ => ""
+
+      def nameOfCourse(teacher: Teacher): String = filter(school.teachers)(t => t == teacher) match
+        case Cons(h, _) => h.courses match
+          case Cons(h, _) => h.name
+          case _ => ""
+        case _ => ""
 
       def setTeacherToCourse(teacher: Teacher, course: Course): School = filter(school.courses)(c => c == course) match
         case Cons(_, _) => SchoolImpl(Sequence.map(school.teachers)(t => if t == teacher then TeacherImpl(t.name, Cons(course, t.courses)) else t), school.courses)

@@ -73,12 +73,26 @@ class SchoolModelTest:
       () => assertEquals(Nil(), school3.coursesOfATeacher(teacher1))
     )
 
-//  @Test def testNameOfTeacher(): Unit =
-//    val baseSchool = SchoolImpl(Nil(), Nil())
-//    val teacher1 = TeacherImpl("John", courses)
-//    val teacher2 = TeacherImpl("Hannah", Nil())
-//    val school = baseSchool.addTeacher("John").addTeacher("Hannah")
-//    assertAll(
-//      () => assertEquals("John", school.nameOfTeacher(teacher1)),
-//      () => assertEquals("Hannah", school.nameOfTeacher(teacher2))
-//    )
+  @Test def testNameOfTeacher(): Unit =
+    val baseSchool = SchoolImpl(Nil(), Nil())
+    val teacher1 = TeacherImpl("John", courses)
+    val teacher2 = TeacherImpl("Hannah", Nil())
+    val school = baseSchool.addTeacher("John").addTeacher("Hannah").addCourse("Math").addCourse("Physics")
+    val school2 = school.setTeacherToCourse(orElse(school.teacherByName("John"), null), orElse(school.courseByName("Math"), null))
+    val school3 = school2.setTeacherToCourse(orElse(school2.teacherByName("John"), null), orElse(school2.courseByName("Physics"), null))
+    assertAll(
+      () => assertEquals("John", school3.nameOfTeacher(CourseImpl("Math"))),
+      () => assertEquals("John", school3.nameOfTeacher(CourseImpl("Physics"))),
+      () => assertEquals("", school3.nameOfTeacher(CourseImpl("Chemistry")))
+    )
+
+  @Test def testNameOfCourse(): Unit =
+    val baseSchool = SchoolImpl(Nil(), Nil())
+    val teacher1 = TeacherImpl("John", courses)
+    val teacher2 = TeacherImpl("Hannah", Nil())
+    val school = baseSchool.addTeacher("John").addTeacher("Hannah").addCourse("Math").addCourse("Physics")
+    val school2 = school.setTeacherToCourse(orElse(school.teacherByName("John"), null), orElse(school.courseByName("Math"), null))
+    assertAll(
+      () => assertEquals("Math", school2.nameOfCourse(orElse(school2.teacherByName("John"), null))),
+      () => assertEquals("", school2.nameOfCourse(orElse(school2.teacherByName("Hannah"), null)))
+    )
