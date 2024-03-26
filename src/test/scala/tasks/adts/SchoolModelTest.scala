@@ -41,7 +41,8 @@ class SchoolModelTest:
   @Test def testTeacherByName(): Unit =
     val teacher1 = TeacherImpl("John", Nil())
     val teacher2 = TeacherImpl("Hannah", Nil())
-    val school = SchoolImpl(Cons(teacher2, Cons(teacher1, Nil())), Nil())
+//    val school = SchoolImpl(Cons(teacher2, Cons(teacher1, Nil())), Nil())
+    val school = SchoolImpl(Nil(), Nil()).addTeacher("John").addTeacher("Hannah")
     assertAll(
       () => assertEquals(Just(teacher1), school.teacherByName("John")),
       () => assertEquals(Just(teacher2), school.teacherByName("Hannah")),
@@ -51,9 +52,33 @@ class SchoolModelTest:
   @Test def testCourseByName(): Unit =
     val course1 = CourseImpl("Math")
     val course2 = CourseImpl("Physics")
-    val school = SchoolImpl(Nil(), Cons(course2, Cons(course1, Nil())))
+    val school = SchoolImpl(Nil(), Nil()).addCourse("Math").addCourse("Physics")
     assertAll(
       () => assertEquals(Just(course1), school.courseByName("Math")),
       () => assertEquals(Just(course2), school.courseByName("Physics")),
       () => assertEquals(Empty(), school.courseByName("Chemistry"))
     )
+
+  @Test def testCoursesOfTeacher(): Unit =
+    val teacher1 = TeacherImpl("John", Nil())
+    val teacher2 = TeacherImpl("Hannah", Nil())
+    val baseSchool = SchoolImpl(Nil(), Nil())
+    val school1 = baseSchool.addTeacher("John").addTeacher("Hannah")
+    val school2 = school1.addCourse("Math").addCourse("Physics")
+    val school3 = school2.setTeacherToCourse(
+      orElse(school2.teacherByName("John"), null), orElse(school2.courseByName("Math"), null)
+    )
+    assertAll(
+      () => assertEquals(Cons(CourseImpl("Math"), Nil()), school3.coursesOfATeacher(orElse(school3.teacherByName("John"), null))),
+      () => assertEquals(Nil(), school3.coursesOfATeacher(teacher1))
+    )
+
+//  @Test def testNameOfTeacher(): Unit =
+//    val baseSchool = SchoolImpl(Nil(), Nil())
+//    val teacher1 = TeacherImpl("John", courses)
+//    val teacher2 = TeacherImpl("Hannah", Nil())
+//    val school = baseSchool.addTeacher("John").addTeacher("Hannah")
+//    assertAll(
+//      () => assertEquals("John", school.nameOfTeacher(teacher1)),
+//      () => assertEquals("Hannah", school.nameOfTeacher(teacher2))
+//    )

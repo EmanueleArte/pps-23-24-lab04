@@ -26,10 +26,10 @@ object SchoolModel:
       def addCourse(name: String): School
       def teacherByName(name: String): Optional[Teacher]
       def courseByName(name: String): Optional[Course]
-  //      def nameOfTeacher(teacher: Teacher): String
-  //      def nameOfCourse(teacher: Teacher): String
-  //      def setTeacherToCourse(teacher: Teacher, course: Course): School
-  //      def coursesOfATeacher(teacher: Teacher): Sequence[Course]
+      //      def nameOfTeacher(course: Course): String
+      //      def nameOfCourse(teacher: Teacher): String
+      def setTeacherToCourse(teacher: Teacher, course: Course): School
+      def coursesOfATeacher(teacher: Teacher): Sequence[Course]
 
 
   object SchoolModuleImpl extends SchoolModule:
@@ -49,6 +49,20 @@ object SchoolModel:
       def courseByName(name: String): Optional[Course] = filter(school.courses)(c => c.name == name) match
         case Cons(h, _) => Just(h)
         case _ => Empty()
+
+      //      def nameOfTeacher(course: Course): String = filter(school.teachers)(t => filter(t.courses)(c => c == course)) match
+      //        case Cons(h, _) => h.name
+      //        case _ => ""
+      //
+      //      def nameOfCourse(teacher: Teacher): String =
+
+      def setTeacherToCourse(teacher: Teacher, course: Course): School = filter(school.courses)(c => c == course) match
+        case Cons(_, _) => SchoolImpl(Sequence.map(school.teachers)(t => if t == teacher then TeacherImpl(t.name, Cons(course, t.courses)) else t), school.courses)
+        case _ => school
+
+      def coursesOfATeacher(teacher: Teacher): Sequence[Course] = filter(school.teachers)(t => t == teacher) match
+        case Cons(h, _) => h.courses
+        case _ => Nil()
 
 
   import SchoolModuleImpl.*
