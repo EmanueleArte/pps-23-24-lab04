@@ -25,7 +25,7 @@ object SchoolModel:
       def addTeacher(name: String): School
       def addCourse(name: String): School
       def teacherByName(name: String): Optional[Teacher]
-  //      def courseByName(name: String): Optional[Course]
+      def courseByName(name: String): Optional[Course]
   //      def nameOfTeacher(teacher: Teacher): String
   //      def nameOfCourse(teacher: Teacher): String
   //      def setTeacherToCourse(teacher: Teacher, course: Course): School
@@ -43,6 +43,10 @@ object SchoolModel:
       def addCourse(name: String): School = SchoolImpl(school.teachers, Cons(CourseImpl(name), school.courses))
 
       def teacherByName(name: String): Optional[Teacher] = filter(school.teachers)(t => t.name == name) match
+        case Cons(h, _) => Just(h)
+        case _ => Empty()
+
+      def courseByName(name: String): Optional[Course] = filter(school.courses)(c => c.name == name) match
         case Cons(h, _) => Just(h)
         case _ => Empty()
 

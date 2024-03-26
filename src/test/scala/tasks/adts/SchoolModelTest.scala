@@ -47,3 +47,13 @@ class SchoolModelTest:
       () => assertEquals(Just(teacher2), school.teacherByName("Hannah")),
       () => assertEquals(Empty(), school.teacherByName("Peter"))
     )
+
+  @Test def testCourseByName(): Unit =
+    val course1 = CourseImpl("Math")
+    val course2 = CourseImpl("Physics")
+    val school = SchoolImpl(Nil(), Cons(course2, Cons(course1, Nil())))
+    assertAll(
+      () => assertEquals(Just(course1), school.courseByName("Math")),
+      () => assertEquals(Just(course2), school.courseByName("Physics")),
+      () => assertEquals(Empty(), school.courseByName("Chemistry"))
+    )
