@@ -3,7 +3,7 @@ package tasks.adts
 import u03.Sequences.*
 import u03.Sequences.Sequence.*
 import u03.Optionals.*
-import u02.AlgebraicDataTypes.Person
+import u03.Optionals.Optional.*
 
 /*  Exercise 2: 
  *  Implement the below trait, and write a meaningful test.
@@ -24,19 +24,13 @@ object SchoolModel:
     extension (school: School)
       def addTeacher(name: String): School
       def addCourse(name: String): School
-  //      def teacherByName(name: String): Optional[Teacher]
+      def teacherByName(name: String): Optional[Teacher]
   //      def courseByName(name: String): Optional[Course]
   //      def nameOfTeacher(teacher: Teacher): String
   //      def nameOfCourse(teacher: Teacher): String
   //      def setTeacherToCourse(teacher: Teacher, course: Course): School
   //      def coursesOfATeacher(teacher: Teacher): Sequence[Course]
 
-
-  case class CourseImpl(name: String)
-
-  case class TeacherImpl(name: String, courses: Sequence[CourseImpl])
-
-  case class SchoolImpl(teachers: Sequence[TeacherImpl], courses: Sequence[CourseImpl])
 
   object SchoolModuleImpl extends SchoolModule:
     type School = SchoolImpl
@@ -47,3 +41,16 @@ object SchoolModel:
       def addTeacher(name: String): School = SchoolImpl(Cons(TeacherImpl(name, Nil()), school.teachers), school.courses)
 
       def addCourse(name: String): School = SchoolImpl(school.teachers, Cons(CourseImpl(name), school.courses))
+
+      def teacherByName(name: String): Optional[Teacher] = filter(school.teachers)(t => t.name == name) match
+        case Cons(h, _) => Just(h)
+        case _ => Empty()
+
+
+  import SchoolModuleImpl.*
+
+  case class CourseImpl(name: String)
+
+  case class TeacherImpl(name: String, courses: Sequence[Course])
+
+  case class SchoolImpl(teachers: Sequence[Teacher], courses: Sequence[Course])

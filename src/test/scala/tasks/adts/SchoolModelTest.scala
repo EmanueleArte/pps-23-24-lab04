@@ -7,6 +7,8 @@ import SchoolModel.SchoolModuleImpl.*
 import org.junit.jupiter.api.Assertions.assertAll
 import u03.Sequences.*
 import u03.Sequences.Sequence.*
+import u03.Optionals.*
+import u03.Optionals.Optional.*
 
 /* Tests should be clear, but note they are expressed independently of the
    specific implementation
@@ -34,4 +36,14 @@ class SchoolModelTest:
     assertAll(
       () => assertEquals(Cons(course1, Nil()), school1.courses),
       () => assertEquals(Cons(course2, Cons(course1, Nil())), school1.addCourse("Physics").courses)
+    )
+
+  @Test def testTeacherByName(): Unit =
+    val teacher1 = TeacherImpl("John", Nil())
+    val teacher2 = TeacherImpl("Hannah", Nil())
+    val school = SchoolImpl(Cons(teacher2, Cons(teacher1, Nil())), Nil())
+    assertAll(
+      () => assertEquals(Just(teacher1), school.teacherByName("John")),
+      () => assertEquals(Just(teacher2), school.teacherByName("Hannah")),
+      () => assertEquals(Empty(), school.teacherByName("Peter"))
     )
