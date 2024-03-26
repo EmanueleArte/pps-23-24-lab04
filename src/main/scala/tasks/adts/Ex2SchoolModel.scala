@@ -23,13 +23,13 @@ object SchoolModel:
     type Course
     extension (school: School)
       def addTeacher(name: String): School
-    //      def addCourse(name: String): School
-    //      def teacherByName(name: String): Optional[Teacher]
-    //      def courseByName(name: String): Optional[Course]
-    //      def nameOfTeacher(teacher: Teacher): String
-    //      def nameOfCourse(teacher: Teacher): String
-    //      def setTeacherToCourse(teacher: Teacher, course: Course): School
-    //      def coursesOfATeacher(teacher: Teacher): Sequence[Course]
+      def addCourse(name: String): School
+  //      def teacherByName(name: String): Optional[Teacher]
+  //      def courseByName(name: String): Optional[Course]
+  //      def nameOfTeacher(teacher: Teacher): String
+  //      def nameOfCourse(teacher: Teacher): String
+  //      def setTeacherToCourse(teacher: Teacher, course: Course): School
+  //      def coursesOfATeacher(teacher: Teacher): Sequence[Course]
 
 
   case class CourseImpl(name: String)
@@ -44,5 +44,6 @@ object SchoolModel:
     type Course = CourseImpl
 
     extension (school: School)
-      def addTeacher(name: String): School = name match
-        case _ => SchoolImpl(Cons(TeacherImpl(name, Nil()), school.teachers), school.courses)
+      def addTeacher(name: String): School = SchoolImpl(Cons(TeacherImpl(name, Nil()), school.teachers), school.courses)
+
+      def addCourse(name: String): School = SchoolImpl(school.teachers, Cons(CourseImpl(name), school.courses))

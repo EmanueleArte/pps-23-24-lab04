@@ -26,3 +26,12 @@ class SchoolModelTest:
       () => assertEquals(Cons(teacher2, Cons(teacher1, Nil())), school1.addTeacher("Hannah").teachers)
     )
 
+  @Test def testAddCourse(): Unit =
+    val baseSchool = SchoolImpl(Nil(), Nil())
+    val course1 = CourseImpl("Math")
+    val course2 = CourseImpl("Physics")
+    val school1 = baseSchool.addCourse("Math")
+    assertAll(
+      () => assertEquals(Cons(course1, Nil()), school1.courses),
+      () => assertEquals(Cons(course2, Cons(course1, Nil())), school1.addCourse("Physics").courses)
+    )
