@@ -16,7 +16,7 @@ package u04.monads
     _ <- addButton(text = "dec", name = "DecButton")
     _ <- addButton(text = "reset", name = "ResetButton")
     _ <- addButton(text = "quit", name = "QuitButton")
-    _ <- addTextField(text = "4", name = "ValueToSet", size = 10)
+    _ <- addTextField(text = "", name = "ValueToSet", size = 10)
     _ <- addButton(text = "set", name = "SetButton")
     _ <- addLabel(text = str, name = "Label1")
     _ <- show()
