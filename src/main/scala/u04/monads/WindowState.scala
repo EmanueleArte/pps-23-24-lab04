@@ -9,7 +9,9 @@ trait WindowState:
   def setSize(width: Int, height: Int): State[Window, Unit]
   def addButton(text: String, name: String): State[Window, Unit]
   def addLabel(text: String, name: String): State[Window, Unit]
+  def addTextField(text: String, name: String, size: Int): State[Window, Unit]
   def toLabel(text: String, name: String): State[Window, Unit]
+  def fromTextField(name: String): Int
   def show(): State[Window, Unit]
   def exec(cmd: =>Unit): State[Window, Unit]
   def eventStream(): State[Window, Stream[String]]
@@ -28,8 +30,16 @@ object WindowStateImpl extends WindowState:
     State(w => ((w.addButton(text, name)), {}))
   def addLabel(text: String, name: String): State[Window, Unit] =
     State(w => ((w.addLabel(text, name)), {}))
+  def addTextField(text: String, name: String, size: Int): State[Window, Unit] =
+    State(w => ((w.addTextField(text, name, size)), {}))
   def toLabel(text: String, name: String): State[Window, Unit] =
     State(w => ((w.showToLabel(text, name)), {}))
+  def fromTextField(name: String): Int =
+    try
+      getFrame.getTextFieldValue(name).toInt
+    catch
+      case e: NumberFormatException => Int.MaxValue
+
   def show(): State[Window, Unit] =
     State(w => (w.show, {}))
   def exec(cmd: =>Unit): State[Window, Unit] =

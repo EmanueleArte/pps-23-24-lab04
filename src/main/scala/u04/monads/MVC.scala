@@ -16,6 +16,8 @@ package u04.monads
     _ <- addButton(text = "dec", name = "DecButton")
     _ <- addButton(text = "reset", name = "ResetButton")
     _ <- addButton(text = "quit", name = "QuitButton")
+    _ <- addTextField(text = "4", name = "ValueToSet", size = 10)
+    _ <- addButton(text = "set", name = "SetButton")
     _ <- addLabel(text = str, name = "Label1")
     _ <- show()
     events <- eventStream()
@@ -27,7 +29,8 @@ package u04.monads
         case "IncButton" => mv(seq(inc(), get()), i => toLabel(i.toString, "Label1"))
         case "DecButton" => mv(seq(dec(), get()), i => toLabel(i.toString, "Label1"))
         case "ResetButton" => mv(seq(reset(), get()), i => toLabel(i.toString, "Label1"))
-        case "QuitButton" => mv(nop(), _ => exec(sys.exit()))))
+        case "QuitButton" => mv(nop(), _ => exec(sys.exit()))
+        case "SetButton" => mv(seq(set(fromTextField("ValueToSet")), get()), i => toLabel(i.toString, "Label1"))))
   yield ()
 
   controller.run((initialCounter(), initialWindow))
