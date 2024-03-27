@@ -1,4 +1,4 @@
-package alltasks
+package tasks.alltasks
 
 import u03.Sequences.*
 import u03.Sequences.Sequence.*
